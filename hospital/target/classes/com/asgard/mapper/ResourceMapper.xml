@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asgard.mapper.ResourceMapper">
+	<select id="listAll" parameterType="Map" resultType="Permission">
+		select * from permission
+			<where>
+				<if test="resource_name != null and resource_name != '' ">
+					resource_name like '%${resource_name}%'
+				</if>
+			</where>
+	</select>
+	
+	<select id="selectById" parameterType="int" resultType="Permission">
+		select * from permission where id = #{id}
+	</select>
+	
+	<insert id="insert">
+		insert into permission  (
+		resource_name,
+		resource_url,
+		status )   
+		values (#{resource_name},#{resource_url},#{status})
+	</insert>
+	
+	<update id="update">
+		update permission  set resource_name= #{resource_name},
+		resource_url = #{resource_url},
+		super_resource_id = #{super_resource_id},
+		status = #{status}  
+		where id = #{id}
+	</update>
+		
+	
+	<delete id="delete">
+		delete from permission where id =#{id}
+	</delete>
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asgard.mapper.DoctorMapper">
+
+	<select id="listAll" parameterType="Map" resultType="Doctor">
+		select d.id,d.name,d.time,s.secco_name from doctor d , section s
+		<where>
+			d.section_id = s.id
+			<if test=" id != null and id != '' ">
+				and d.id like '%${id}%'
+			</if>
+			<if test="name != null and name != '' ">
+				and d.name like '%${name}%'
+			</if>
+			<if test="secco_name != null and secco_name != '' ">
+				and s.secco_name like '%${secco_name}%'
+			</if>
+		</where>
+	</select>
+
+	<delete id="deleteDoctor" parameterType="int">
+		delete from doctor where id = #{id}
+	</delete>
+	
+	<select id="selectCertificate_type" parameterType="int" resultType="CertificateType">
+		select c.name from certificate_type c , doctor d where d.certificate_type = c.id and d.id = #{id}
+	</select>
+	<select id="selectSection" parameterType="int" resultType="Section">
+		select s.secco_name from section s, doctor d where d.section_id = s.id and d.id=#{id}
+	</select>
+	<select id="selectById" parameterType="int" resultType="Doctor">
+		select * 
+		from doctor d , section s 
+		where 
+			d.section_id = s.id and 
+			d.id = #{id}
+	</select>
+	<update id="edit" parameterType="Doctor" >
+		update doctor set
+		name=#{name},certificate_type=#{certificate_type},
+		ID_num=#{ID_num},phone=#{phone},special_plane=#{special_plane},sex=#{sex},age=#{age},birther=#{birther},email=#{email},
+		section_id=#{section_id},education=#{education},noted=#{noted}    
+		where id=#{id}
+	</update>
+
+
+	<insert id="insertDoctor" parameterType="Doctor">
+		insert into doctor (
+		name,
+		certificate_type,
+		ID_num,
+		phone,
+		special_plane,
+		sex,
+		age,
+		birther,
+		email,
+		section_id,
+		education,
+		noted,
+		time ) 
+		values (
+			#{name},#{certificate_type},#{ID_num},#{phone},#{special_plane},#{sex},
+			#{age},#{birther},#{email},#{section_id},#{education},#{noted},#{time}
+		)
+		
+	</insert>
+
+
+</mapper>

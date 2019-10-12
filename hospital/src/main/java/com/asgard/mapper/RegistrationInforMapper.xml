@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asgard.mapper.RegistrationInforMapper">
+	<select id="listAll" parameterType="Map" resultType="RegistrationInfor">
+		select  *  from doctor d,section s, registration_infor r    
+		<where>
+		 		d.id = s.id and d.id = r.doctor_id 
+			<if test="medical_record != null and medical_record != '' ">
+			 	and r.medical_record like '%${medical_record}%'
+			</if>
+			<if test="name != null and name != '' ">
+				and d.name like '%${name}%'
+			</if>
+			<if test="secco_name != null and secco_name != '' ">
+				and s.secco_name like '%${secco_name}%'
+			</if>
+			<if test="starttime != null and starttime != '' ">
+				and r.time 	&gt; #{starttime} 
+			</if> 
+			<if test="endtime != null and endtime != '' ">
+				and r.time &lt; #{endtime}
+			</if>
+			
+		</where>
+	</select>
+	
+	<select id="selectByRecord" parameterType="String" resultType="RegistrationInfor">
+		select * from registration_infor where medical_record = #{medical_record}
+	</select>
+	
+	<update id="edit" parameterType="RegistrationInfor">
+		update registration_infor set   
+		name =#{name},
+		certificate_type =#{certificate_type},
+		ID_num =#{ID_num},
+		social_safe_num =#{social_safe_num},
+		phone =#{phone},
+		self_paying =#{self_paying},
+		sex =#{sex},
+		career =#{career},
+		early_appointment =#{early_appointment},
+		doctor_id =#{doctor_id},
+		status =#{status},
+		noted =#{noted},
+		time =#{time},
+		section_id =#{section_id},
+		age =#{age},
+		registration_fee =#{registration_fee} where medical_record =#{medical_record}
+	</update>
+	
+	<insert id="insert" parameterType="RegistrationInfor">
+		insert into registration_infor  
+		(medical_record,
+		name,
+		certificate_type,
+		ID_num,
+		social_safe_num,
+		phone,
+		self_paying,
+		sex,
+		career,
+		early_appointment,
+		doctor_id,
+		status,
+		noted,
+		time,
+		section_id,
+		age,
+		registration_fee)  
+		values (#{medical_record},#{name},#{certificate_type},#{ID_num},#{social_safe_num},
+		#{phone},#{self_paying},#{sex},
+		#{career},#{early_appointment},#{doctor_id},
+		#{status},#{noted},#{time},#{section_id},#{age},
+		#{registration_fee})
+	</insert>
+	
+	<delete id="delete" parameterType="String">
+		delete from registration_infor where medical_record =#{medical_record}
+	</delete>
+	
+</mapper>
